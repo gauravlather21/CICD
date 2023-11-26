@@ -20,7 +20,7 @@ login to your AWS account using your credentials.
 
 3. Under General configuration, enter the following:
 Bucket name: Enter 
-* demo-bucket-<UniqueNumber> (Append a unique number to the end of calabs-bucket-)
+* demo-bucket-<UniqueNumber> (Append a unique number to the end of demo-bucket-)
 * Region: Ensure US West (Oregon) us-west-2 is selected
 
 You have added a unique number to the bucket name because Amazon S3 bucket names must be unique regardless of the AWS region in which the bucket is created.
@@ -109,6 +109,83 @@ In this step, you created a bucket policy, uploaded an example website, and conf
 AWS doesn't recommend serving websites directly from Amazon S3. Instead, they recommend using Amazon S3 as an origin for a Content Delivery Network (CDN). A CDN pulls copies of the site from the origin and stores them in multiple global locations. The main benefit of using a CDN is lower latency for users when they access the site.
 
 In the next step, you will put your website behind a CDN by creating an Amazon CloudFront distribution.
+
+## Step 4: Creating an Amazon CloudFront Distribution for the Static Website
+Amazon CloudFront is a global Content Delivery Network (CDN) that delivers data securely and efficiently. CloudFront pulls your website out to the edge of the network, reducing latency when accessed from different global locations.
+
+In this step, you will set up an Amazon CloudFront distribution for your static site hosted in your Amazon S3 bucket, update the bucket policy to allow access to the CloudFront distribution, and update permissions to block public access to the S3 bucket.
+
+### Set up an Amazon Cloudfront distribution:
+1. In the AWS Management Console search bar, enter CloudFront, and click the CloudFront result under Services:
+
+2. To start creating a distribution, click Create a CloudFront Distribution:
+
+3. Under Origin, in the Origin Domain text-box, enter the Amazon S3 static website hosting endpoint that you created earlier:
+
+4. Under Origin, in the Origin access, select Origin access control settings and click Create control setting:
+
+5. Under Create control setting, enter the following values:
+* Name: Enter demo-s3cf-<UniqueNumber> (Append a unique number to the end of demo-s3cf-)
+* Signing behavior: Ensure Sign requests is selected
+
+Origin access control secures S3 origins by allowing access to only designated distributions. This follows AWS best practice of using IAM service principals to authenticate with S3 origins.
+
+6. Click Create
+
+Leave all other fields in this section as well as the Default cache behavior section as their default values.
+
+7. Select Do not enable security protections under Web Application Firewall (WAF):
+
+8. Scroll down to Settings, and in the Price class selection, select Use only North America and Europe:
+
+Amazon CloudFront minimizes end-user latency by delivering content from its entire global network of edge locations. Price Classes let you reduce your delivery prices by excluding Amazon CloudFront’s more expensive edge locations from your Amazon CloudFront distribution. In these cases, Amazon CloudFront will deliver your content from edge locations within the locations in the price class you selected and charge you the data transfer and request pricing from the actual location where the content was delivered.
+
+9. In the Default root object field, enter index.html.
+
+You are setting this field because Amazon CloudFront doesn't always transparently relay requests to the origin. If you did not set a default root object on the distribution you would see an AccessDenied error when you access the CloudFront distribution's domain later in lab step.
+
+10. To finish configuring your distribution, at the bottom of the page, click Create distribution:
+
+CloudFront automatically assigns an ID (top of the page) and a Distribution domain name to the distribution and starts updating the edge locations to serve your content:
+
+### Update the bucket policy:
+11. Click Copy policy at the top of the page:
+
+This policy provides a new bucket policy that provides the s3:GetObject permission to the distribution. This allows for blocking all public access to the S3 bucket while maintaining access to the website via the distribution.
+
+12. To implement the policy, return to the bucket you created, click the Permissions tab, scroll down to the Bucket policy section, click Edit, paste the policy you copied, and click Save changes:
+
+### Block public access:
+13. Under the Block public access (bucket settings) section click Edit, select the Block all public access box, click Save changes, enter confirm into the field, and click Confirm:
+
+The previous Bucket website endpoint will no longer work and will return a 403 error. 
+
+14. Return to the CloudFront Distributions table:
+
+It can take up to 15 minutes to deploy a new Amazon CloudFront distribution. Once complete, the Status will change to Enabled.
+Once your deployment is complete, continue with the instructions.
+
+15. To view details of your distribution, click the random alphanumeric ID:
+
+16. Copy the value of the Distribution Domain Name field:
+
+17. Paste the domain name into the address bar of a new browser tab.
+
+You will see the website that you uploaded to your Amazon S3 bucket display:
+
+You are accessing the website through your Amazon CloudFront distribution.
+
+## Summary:
+In this project, you created an Amazon S3 bucket and used it to host a static website. You created an Amazon CloudFront distribution and configured it to use your S3 bucket as an origin. You tested that you could access the static website directly through Amazon S3, and through your Amazon CloudFront distribution. You updated the S3 bucket policy to restrict access to only the CloudFront distribution and blocked all public access to the S3 bucket.
+
+
+
+
+
+
+
+
+
 
 
 
