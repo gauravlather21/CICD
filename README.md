@@ -1,7 +1,7 @@
 # Create and configure a Static Website With S3 And CloudFront
-In this project, you will host your static website using the Amazon Simple Storage Service (S3) so that it is secure, fast, protected against data loss, and can scale to support enterprise-level traffic. To do that, you'll store your website files on Amazon S3 and also use S3 to deliver your content to visitors to your website.
+In this project, I have hosted static website using the Amazon Simple Storage Service (S3). It is secure, fast, protected against data loss, and can scale to support enterprise-level traffic. To do that, I have to store my website files on Amazon S3 and also use S3 to deliver my content to visitors to my website.
 
-After setting up the static website on S3, this project will show you how to use Amazon CloudFront to create a content delivery network (CDN). A CDN makes your website content available from data centers around the world, called edge locations. Using edge locations improves the speed of your website by reducing latency. Doing so is especially important if your website displays large media files such as high-resolution images, audio, or video.
+After setting up the static website on S3, this project will show that how to use Amazon CloudFront to create a content delivery network (CDN). A CDN makes website content available from data centers around the world, called edge locations. Using edge locations improves the speed of your website by reducing latency. Doing so is especially important if your website displays large media files such as high-resolution images, audio, or video.
 
 ## Project Objectives
 * Configure static website hosting on Amazon S3
